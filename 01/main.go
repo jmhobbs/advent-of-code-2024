@@ -43,6 +43,7 @@ func main() {
 	}
 
 	fmt.Printf("A: %d\n", ListDistance(left, right))
+	fmt.Printf("B: %d\n", ListSimilarity(left, right))
 }
 
 func ListDistance(left []int, right []int) int {
@@ -66,5 +67,20 @@ func abs(val int) int {
 }
 
 func ListSimilarity(left []int, right []int) int {
-	return 0
+	var (
+		score   int
+		counter int
+	)
+
+	for _, l := range left {
+		counter = 0
+		for _, r := range right {
+			if l == r {
+				counter++
+			}
+		}
+		score += counter * l
+	}
+
+	return score
 }
