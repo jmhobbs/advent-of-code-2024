@@ -64,3 +64,7 @@ func abs(val int) int {
 	}
 	return val
 }
+
+func ListSimilarity(left []int, right []int) int {
+	return 0
+}
