@@ -49,3 +49,45 @@ func Test_InputsSafe(t *testing.T) {
 		assert.Equal(t, test.expected, main.InputsSafe(test.input))
 	}
 }
+
+func Test_InputsSafeWithDampener(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected bool
+	}{
+		// `7 6 4 2 1`: Safe without removing any level.
+		{
+			[]int{7, 6, 4, 2, 1},
+			true,
+		},
+		// `1 2 7 8 9`: Unsafe regardless of which level is removed.
+		{
+			[]int{1, 2, 7, 8, 9},
+			false,
+		},
+		// `9 7 6 2 1`: Unsafe regardless of which level is removed.
+		{
+			[]int{9, 7, 6, 2, 1},
+			false,
+		},
+		// `1 3 2 4 5`: Safe by removing the second level, 3.
+		{
+			[]int{1, 3, 2, 4, 5},
+			true,
+		},
+		// `8 6 4 4 1`: Safe by removing the third level, 4.
+		{
+			[]int{8, 6, 4, 4, 1},
+			true,
+		},
+		// `1 3 6 7 9`: Safe without removing any level.
+		{
+			[]int{1, 3, 6, 7, 9},
+			true,
+		},
+	}
+
+	for _, test := range tests {
+		assert.Equal(t, test.expected, main.InputsSafeWithDampener(test.input))
+	}
+}

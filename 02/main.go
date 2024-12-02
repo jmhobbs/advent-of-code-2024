@@ -38,6 +38,10 @@ func main() {
 	fmt.Printf("A: %d\n", safeReports)
 }
 
+func InputsSafeWithDampener(levels []int) bool {
+	return false
+}
+
 func InputsSafe(levels []int) bool {
 	var ascending bool
 
