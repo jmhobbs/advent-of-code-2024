@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -13,15 +15,59 @@ func main() {
 	}
 	defer f.Close()
 
+	var safeReports int
+
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+		levelStrs := strings.Split(scanner.Text(), " ")
+		levels := make([]int, len(levelStrs))
+		for i, v := range levelStrs {
+			levels[i], err = strconv.Atoi(v)
+			if err != nil {
+				panic(err)
+			}
+		}
+		if InputsSafe(levels) {
+			safeReports += 1
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
+
+	fmt.Printf("A: %d\n", safeReports)
 }
 
 func InputsSafe(levels []int) bool {
-	return false
+	var ascending bool
+
+	for i, v := range levels {
+		if i == 0 {
+			ascending = levels[1] > v
+			continue
+		}
+
+		if ascending {
+			if levels[i-1] >= v {
+				return false
+			}
+		} else {
+			if levels[i-1] <= v {
+				return false
+			}
+		}
+
+		if abs(v-levels[i-1]) > 3 {
+			return false
+		}
+	}
+
+	return true
+}
+
+func abs(val int) int {
+	if val < 0 {
+		return -val
+	}
+	return val
 }
