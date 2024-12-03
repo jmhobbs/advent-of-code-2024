@@ -123,3 +123,33 @@ func Test_ParseInput(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
+
+func Test_CountSafeReports(t *testing.T) {
+	assert.Equal(
+		t,
+		2,
+		main.CountSafeReports([][]int{
+			{7, 6, 4, 2, 1},
+			{1, 2, 7, 8, 9},
+			{9, 7, 6, 2, 1},
+			{1, 3, 2, 4, 5},
+			{8, 6, 4, 4, 1},
+			{1, 3, 6, 7, 9},
+		}),
+	)
+}
+
+func Test_CountSafeReportsWithDampener(t *testing.T) {
+	assert.Equal(
+		t,
+		4,
+		main.CountSafeReportsWithDampener([][]int{
+			{7, 6, 4, 2, 1},
+			{1, 2, 7, 8, 9},
+			{9, 7, 6, 2, 1},
+			{1, 3, 2, 4, 5},
+			{8, 6, 4, 4, 1},
+			{1, 3, 6, 7, 9},
+		}),
+	)
+}

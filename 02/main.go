@@ -18,33 +18,19 @@ func main() {
 	}
 	defer f.Close()
 
-	var (
-		safeReports             int
-		safeReportsWithDampener int
-	)
-
-	levelInputs, err := ParseInput(f)
+	reports, err := ParseInput(f)
 	if err != nil {
 		panic(err)
 	}
 
-	for _, levels := range levelInputs {
-		if InputsSafe(levels) {
-			safeReports += 1
-		}
-		if InputsSafeWithDampener(levels) {
-			safeReportsWithDampener += 1
-		}
-	}
-
-	fmt.Printf("A: %d\n", safeReports)
-	fmt.Printf("B: %d\n", safeReportsWithDampener)
+	fmt.Printf("A: %d\n", CountSafeReports(reports))
+	fmt.Printf("B: %d\n", CountSafeReportsWithDampener(reports))
 }
 
 func ParseInput(input io.Reader) ([][]int, error) {
 	var (
-		levelInputs [][]int = [][]int{}
-		err         error
+		reports [][]int = [][]int{}
+		err     error
 	)
 
 	scanner := bufio.NewScanner(input)
@@ -54,12 +40,32 @@ func ParseInput(input io.Reader) ([][]int, error) {
 		for i, v := range levelStrs {
 			levels[i], err = strconv.Atoi(v)
 			if err != nil {
-				return levelInputs, err
+				return reports, err
 			}
 		}
-		levelInputs = append(levelInputs, levels)
+		reports = append(reports, levels)
 	}
-	return levelInputs, scanner.Err()
+	return reports, scanner.Err()
+}
+
+func CountSafeReports(reports [][]int) int {
+	var safeReports int
+	for _, levels := range reports {
+		if InputsSafe(levels) {
+			safeReports += 1
+		}
+	}
+	return safeReports
+}
+
+func CountSafeReportsWithDampener(reports [][]int) int {
+	var safeReports int
+	for _, levels := range reports {
+		if InputsSafeWithDampener(levels) {
+			safeReports += 1
+		}
+	}
+	return safeReports
 }
 
 func InputsSafeWithDampener(levels []int) bool {
