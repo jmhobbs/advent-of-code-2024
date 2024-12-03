@@ -43,6 +43,13 @@ func Test_ExtractMultipliers(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		assert.Equal(t, test.expected, main.ExtractMultipliers(test.input))
+		assert.Equal(t, test.expected, main.ExtractMultipliers([]byte(test.input)))
 	}
+}
+
+func Test_SumMultipliersFromCorruptedMemory(t *testing.T) {
+	// xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
+	input := []byte("xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))")
+	// ...produces 161 (2*4 + 5*5 + 11*8 + 8*5)
+	assert.Equal(t, 161, main.SumMultipliersFromCorruptedMemory(input))
 }
