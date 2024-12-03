@@ -53,3 +53,11 @@ func Test_SumMultipliersFromCorruptedMemory(t *testing.T) {
 	// ...produces 161 (2*4 + 5*5 + 11*8 + 8*5)
 	assert.Equal(t, 161, main.SumMultipliersFromCorruptedMemory(input))
 }
+
+func Test_SumMultipliersFromCorruptedMemoryWithEnablers(t *testing.T) {
+	// For example:
+	//   xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
+	input := []byte("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
+	// This time, the sum of the results is 48 (2*4 + 8*5).
+	assert.Equal(t, 48, main.SumMultipliersFromCorruptedMemoryWithEnablers(input))
+}

@@ -47,3 +47,7 @@ func SumMultipliersFromCorruptedMemory(input []byte) int {
 	}
 	return sum
 }
+
+func SumMultipliersFromCorruptedMemoryWithEnablers(input []byte) int {
+	return 0
+}
