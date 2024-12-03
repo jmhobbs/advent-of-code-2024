@@ -1,6 +1,7 @@
 package main_test
 
 import (
+	"strings"
 	"testing"
 
 	main "github.com/jmhobbs/advent-of-code-2024/02"
@@ -90,4 +91,35 @@ func Test_InputsSafeWithDampener(t *testing.T) {
 	for _, test := range tests {
 		assert.Equal(t, test.expected, main.InputsSafeWithDampener(test.input))
 	}
+}
+
+func Test_ParseInput(t *testing.T) {
+	t.Run("valid", func(t *testing.T) {
+		input := `7 6 4 2 1
+1 2 7 8 9
+9 7 6 2 1
+`
+		levels, err := main.ParseInput(strings.NewReader(input))
+		assert.NoError(t, err)
+		assert.Equal(t, [][]int{
+			{7, 6, 4, 2, 1},
+			{1, 2, 7, 8, 9},
+			{9, 7, 6, 2, 1},
+		}, levels)
+	})
+
+	t.Run("invalid numbers", func(t *testing.T) {
+		input := `7 6 4 2 1
+1 no 7 8 9
+9 7 6 2 1
+`
+		_, err := main.ParseInput(strings.NewReader(input))
+		assert.Error(t, err)
+	})
+
+	t.Run("invalid spacing", func(t *testing.T) {
+		input := `7 6  4 2 1`
+		_, err := main.ParseInput(strings.NewReader(input))
+		assert.Error(t, err)
+	})
 }

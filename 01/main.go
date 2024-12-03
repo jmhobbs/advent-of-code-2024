@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"slices"
 	"strconv"
@@ -18,34 +19,39 @@ func main() {
 	}
 	defer f.Close()
 
+	left, right, err := ParseInput(f)
+
+	fmt.Printf("A: %d\n", ListDistance(left, right))
+	fmt.Printf("B: %d\n", ListSimilarity(left, right))
+}
+
+func ParseInput(input io.Reader) ([]int, []int, error) {
 	var (
-		left  []int
-		right []int
+		left  []int = []int{}
+		right []int = []int{}
 		split []string
 		value int64
+		err   error
 	)
 
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		split = strings.SplitN(scanner.Text(), "   ", 2)
+
 		value, err = strconv.ParseInt(split[0], 10, 64)
 		if err != nil {
-			panic(err)
+			return left, right, err
 		}
 		left = append(left, int(value))
 
 		value, err = strconv.ParseInt(split[1], 10, 64)
 		if err != nil {
-			panic(err)
+			return left, right, err
 		}
 		right = append(right, int(value))
 	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
-	}
 
-	fmt.Printf("A: %d\n", ListDistance(left, right))
-	fmt.Printf("B: %d\n", ListSimilarity(left, right))
+	return left, right, scanner.Err()
 }
 
 func ListDistance(left []int, right []int) int {

@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -22,16 +23,12 @@ func main() {
 		safeReportsWithDampener int
 	)
 
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		levelStrs := strings.Split(scanner.Text(), " ")
-		levels := make([]int, len(levelStrs))
-		for i, v := range levelStrs {
-			levels[i], err = strconv.Atoi(v)
-			if err != nil {
-				panic(err)
-			}
-		}
+	levelInputs, err := ParseInput(f)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, levels := range levelInputs {
 		if InputsSafe(levels) {
 			safeReports += 1
 		}
@@ -39,12 +36,30 @@ func main() {
 			safeReportsWithDampener += 1
 		}
 	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
-	}
 
 	fmt.Printf("A: %d\n", safeReports)
 	fmt.Printf("B: %d\n", safeReportsWithDampener)
+}
+
+func ParseInput(input io.Reader) ([][]int, error) {
+	var (
+		levelInputs [][]int = [][]int{}
+		err         error
+	)
+
+	scanner := bufio.NewScanner(input)
+	for scanner.Scan() {
+		levelStrs := strings.Split(scanner.Text(), " ")
+		levels := make([]int, len(levelStrs))
+		for i, v := range levelStrs {
+			levels[i], err = strconv.Atoi(v)
+			if err != nil {
+				return levelInputs, err
+			}
+		}
+		levelInputs = append(levelInputs, levels)
+	}
+	return levelInputs, scanner.Err()
 }
 
 func InputsSafeWithDampener(levels []int) bool {

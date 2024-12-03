@@ -28,7 +28,7 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"io"
 	"os"
 )
 
@@ -39,13 +39,21 @@ func main() {
 	}
 	defer f.Close()
 
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-    fmt.Println(scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
+	_, err = ParseInput(f)
+	if err != nil {
 		panic(err)
 	}
+}
+
+func ParseInput(in io.Reader) ([]string, error) {
+	lines := []string{}
+
+	scanner := bufio.NewScanner(in)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines, scanner.Err()
 }
 
 func PartOne() int {
@@ -57,6 +65,7 @@ cat <<EOF > "$fullpath/main_test.go"
 package main_test
 
 import (
+	"strings"
 	"testing"
 
 	main "github.com/jmhobbs/advent-of-code-2024/$dirname"
@@ -64,7 +73,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_ParseInput(t *testing.T) {
+	actual, err := main.ParseInput(strings.NewReader(""))
+	assert.Nil(t, err)
+	assert.Equal(t, []string{}, actual)
+}
+
 func Test_Thing(t *testing.T) {
-  assert.Equal(t, 1, main.PartOne())
+	assert.Equal(t, 1, main.PartOne())
 }
 EOF
