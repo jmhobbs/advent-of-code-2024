@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/jmhobbs/advent-of-code-2024/util"
 )
 
 func main() {
@@ -78,17 +80,10 @@ func InputsSafe(levels []int) bool {
 			}
 		}
 
-		if abs(v-levels[i-1]) > 3 {
+		if util.Abs(v-levels[i-1]) > 3 {
 			return false
 		}
 	}
 
 	return true
-}
-
-func abs(val int) int {
-	if val < 0 {
-		return -val
-	}
-	return val
 }

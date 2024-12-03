@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/jmhobbs/advent-of-code-2024/util"
 )
 
 func main() {
@@ -53,17 +55,10 @@ func ListDistance(left []int, right []int) int {
 	var distance int
 
 	for i, l := range left {
-		distance += abs(l - right[i])
+		distance += util.Abs(l - right[i])
 	}
 
 	return distance
-}
-
-func abs(val int) int {
-	if val < 0 {
-		return -val
-	}
-	return val
 }
 
 func ListSimilarity(left []int, right []int) int {
