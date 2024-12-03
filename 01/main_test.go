@@ -1,7 +1,9 @@
-package main
+package main_test
 
 import (
 	"testing"
+
+	main "github.com/jmhobbs/advent-of-code-2024/01"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -10,12 +12,12 @@ func Test_ListDistance(t *testing.T) {
 	left := []int{3, 4, 2, 1, 3, 3}
 	right := []int{4, 3, 5, 3, 9, 3}
 
-	assert.Equal(t, 11, ListDistance(left, right))
+	assert.Equal(t, 11, main.ListDistance(left, right))
 }
 
 func Test_ListSimilarity(t *testing.T) {
 	left := []int{3, 4, 2, 1, 3, 3}
 	right := []int{4, 3, 5, 3, 9, 3}
 
-	assert.Equal(t, 31, ListSimilarity(left, right))
+	assert.Equal(t, 31, main.ListSimilarity(left, right))
 }
