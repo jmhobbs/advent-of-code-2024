@@ -15,7 +15,10 @@ func main() {
 	}
 	defer f.Close()
 
-	var safeReports int
+	var (
+		safeReports             int
+		safeReportsWithDampener int
+	)
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -30,15 +33,29 @@ func main() {
 		if InputsSafe(levels) {
 			safeReports += 1
 		}
+		if InputsSafeWithDampener(levels) {
+			safeReportsWithDampener += 1
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
 
 	fmt.Printf("A: %d\n", safeReports)
+	fmt.Printf("B: %d\n", safeReportsWithDampener)
 }
 
 func InputsSafeWithDampener(levels []int) bool {
+	if InputsSafe(levels) {
+		return true
+	}
+
+	for i := range levels {
+		if InputsSafe(append(append([]int{}, levels[:i]...), levels[i+1:]...)) {
+			return true
+		}
+	}
+
 	return false
 }
 
