@@ -20,6 +20,7 @@ func main() {
 	}
 
 	fmt.Printf("A: %d\n", CountXmas(puzzle))
+	fmt.Printf("B: %d\n", CountXMas(puzzle))
 }
 
 func ParseInput(in io.Reader) ([][]byte, error) {
@@ -103,5 +104,24 @@ func CountXmas(puzzle [][]byte) int {
 }
 
 func CountXMas(puzzle [][]byte) int {
-	return 0
+	var count int
+
+	// MAS requires at least one line above and one below
+	for y := 1; y < len(puzzle)-1; y++ {
+		row := puzzle[y]
+		// MAS requires at least one column before and one after
+		for x := 1; x < len(row)-1; x++ {
+			if row[x] == 'A' {
+				// high left -> low right
+				highToLow := (puzzle[y-1][x-1] == 'S' && puzzle[y+1][x+1] == 'M') || (puzzle[y-1][x-1] == 'M' && puzzle[y+1][x+1] == 'S')
+				// low left -> high right
+				lowToHigh := (puzzle[y+1][x-1] == 'S' && puzzle[y-1][x+1] == 'M') || (puzzle[y+1][x-1] == 'M' && puzzle[y-1][x+1] == 'S')
+				if highToLow && lowToHigh {
+					count += 1
+				}
+			}
+		}
+	}
+
+	return count
 }
