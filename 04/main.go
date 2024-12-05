@@ -101,3 +101,7 @@ func CountXmas(puzzle [][]byte) int {
 	}
 	return count
 }
+
+func CountXMas(puzzle [][]byte) int {
+	return 0
+}
