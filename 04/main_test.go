@@ -27,6 +27,140 @@ XMAS.S
 }
 
 func Test_CountXmas(t *testing.T) {
+	t.Run("forwards", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'.', 'X', 'M', 'A', 'S', '.'}}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'X', 'M', 'A', 'S', '.'}}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'.', 'X', 'M', 'A', 'S'}}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'X', 'M', 'A', 'S'}}))
+		assert.Equal(t, 2, main.CountXmas([][]byte{{'X', 'M', 'A', 'S', 'X', 'M', 'A', 'S'}}))
+	})
+
+	t.Run("backwards", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'.', 'S', 'A', 'M', 'X', '.'}}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'S', 'A', 'M', 'X', '.'}}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'.', 'S', 'A', 'M', 'X'}}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{{'S', 'A', 'M', 'X'}}))
+		assert.Equal(t, 2, main.CountXmas([][]byte{{'S', 'A', 'M', 'X', 'S', 'A', 'M', 'X'}}))
+	})
+
+	t.Run("up", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.', '.'},
+			{'.', 'X', '.'},
+			{'.', 'M', '.'},
+			{'.', 'A', '.'},
+			{'.', 'S', '.'},
+			{'.', '.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.'},
+			{'.', 'X'},
+			{'.', 'M'},
+			{'.', 'A'},
+			{'.', 'S'},
+			{'.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.'},
+			{'X', '.'},
+			{'M', '.'},
+			{'A', '.'},
+			{'S', '.'},
+			{'.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', 'X', '.'},
+			{'.', 'M', '.'},
+			{'.', 'A', '.'},
+			{'.', 'S', '.'},
+			{'.', '.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.', '.'},
+			{'.', 'X', '.'},
+			{'.', 'M', '.'},
+			{'.', 'A', '.'},
+			{'.', 'S', '.'},
+		}))
+	})
+
+	t.Run("down", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.', '.'},
+			{'.', 'S', '.'},
+			{'.', 'A', '.'},
+			{'.', 'M', '.'},
+			{'.', 'X', '.'},
+			{'.', '.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.'},
+			{'.', 'S'},
+			{'.', 'A'},
+			{'.', 'M'},
+			{'.', 'X'},
+			{'.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.'},
+			{'S', '.'},
+			{'A', '.'},
+			{'M', '.'},
+			{'X', '.'},
+			{'.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', 'S', '.'},
+			{'.', 'A', '.'},
+			{'.', 'M', '.'},
+			{'.', 'X', '.'},
+			{'.', '.', '.'},
+		}))
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.', '.'},
+			{'.', 'S', '.'},
+			{'.', 'A', '.'},
+			{'.', 'M', '.'},
+			{'.', 'X', '.'},
+		}))
+	})
+
+	t.Run("up-left", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'S', '.', '.', '.'},
+			{'.', 'A', '.', '.'},
+			{'.', '.', 'M', '.'},
+			{'.', '.', '.', 'X'},
+		}))
+	})
+
+	t.Run("up-right", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.', '.', 'S'},
+			{'.', '.', 'A', '.'},
+			{'.', 'M', '.', '.'},
+			{'X', '.', '.', '.'},
+		}))
+	})
+
+	t.Run("down-left", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'.', '.', '.', 'X'},
+			{'.', '.', 'M', '.'},
+			{'.', 'A', '.', '.'},
+			{'S', '.', '.', '.'},
+		}))
+	})
+
+	t.Run("down-right", func(t *testing.T) {
+		assert.Equal(t, 1, main.CountXmas([][]byte{
+			{'X', '.', '.', '.'},
+			{'.', 'M', '.', '.'},
+			{'.', '.', 'A', '.'},
+			{'.', '.', '.', 'S'},
+		}))
+	})
+
 	puzzle := [][]byte{
 		{'.', '.', 'X', '.', '.', '.'},
 		{'.', 'S', 'A', 'M', 'X', '.'},
