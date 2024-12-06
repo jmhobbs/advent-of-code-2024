@@ -3,18 +3,14 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
+
+	"github.com/jmhobbs/advent-of-code-2024/util"
 )
 
 func main() {
-	buf, err := os.ReadFile("input.txt")
-	if err != nil {
-		panic(err)
-	}
-
-	ops := ExtractOperations(buf)
+	ops := ExtractOperations(util.ReadInput())
 
 	fmt.Printf("A: %d\n", SumMultipliers(ops))
 	fmt.Printf("B: %d\n", SumMultipliersWithEnablers(ops))

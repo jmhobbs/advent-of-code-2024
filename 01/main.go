@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
@@ -13,10 +12,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("input.txt")
-	if err != nil {
-		panic(err)
-	}
+	f := util.OpenInput()
 	defer f.Close()
 
 	left, right, err := ParseInput(f)

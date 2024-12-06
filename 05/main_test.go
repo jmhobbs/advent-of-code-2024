@@ -60,6 +60,15 @@ var sampleRules []main.Rule = []main.Rule{
 	{"53", "13"},
 }
 
+var sampleUpdates []main.Update = []main.Update{
+	{"75", "47", "61", "53", "29"},
+	{"97", "61", "53", "29", "13"},
+	{"75", "29", "13"},
+	{"75", "97", "47", "61", "53"},
+	{"61", "13", "29"},
+	{"97", "13", "75", "29", "47"},
+}
+
 func Test_UpdateValid(t *testing.T) {
 	// In the above example, the first update (`75,47,61,53,29`) is in the right order:
 	t.Run("75,47,61,53,29", func(t *testing.T) {
@@ -127,5 +136,10 @@ func Test_SortUpdate(t *testing.T) {
 			main.SortUpdate(sampleRules, main.Update{"97", "13", "75", "29", "47"}),
 		)
 	})
+}
 
+func Test_ValidateOrSortUpdatesAndSumMiddles(t *testing.T) {
+	valid, invalid := main.ValidateOrSortUpdatesAndSumMiddles(sampleRules, sampleUpdates)
+	assert.Equal(t, 143, valid)
+	assert.Equal(t, 123, invalid)
 }

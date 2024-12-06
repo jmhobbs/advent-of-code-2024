@@ -4,14 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"os"
+
+	"github.com/jmhobbs/advent-of-code-2024/util"
 )
 
 func main() {
-	f, err := os.Open("input.txt")
-	if err != nil {
-		panic(err)
-	}
+	f := util.OpenInput()
 	defer f.Close()
 
 	puzzle, err := ParseInput(f)

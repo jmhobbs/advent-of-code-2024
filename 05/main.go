@@ -4,17 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/jmhobbs/advent-of-code-2024/util"
 )
 
 func main() {
-	f, err := os.Open("input.txt")
-	if err != nil {
-		panic(err)
-	}
+	f := util.OpenInput()
 	defer f.Close()
 
 	rules, updates, err := ParseInput(f)
@@ -22,6 +20,13 @@ func main() {
 		panic(err)
 	}
 
+	middleSum, incorrectMiddleSum := ValidateOrSortUpdatesAndSumMiddles(rules, updates)
+
+	fmt.Printf("A: %d\n", middleSum)
+	fmt.Printf("B: %d\n", incorrectMiddleSum)
+}
+
+func ValidateOrSortUpdatesAndSumMiddles(rules []Rule, updates []Update) (int, int) {
 	var (
 		middleSum          int
 		incorrectMiddleSum int
@@ -35,8 +40,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("A: %d\n", middleSum)
-	fmt.Printf("B: %d\n", incorrectMiddleSum)
+	return middleSum, incorrectMiddleSum
 }
 
 type Rule struct {
