@@ -22,14 +22,21 @@ func main() {
 		panic(err)
 	}
 
-	var middleSum int
+	var (
+		middleSum          int
+		incorrectMiddleSum int
+	)
+
 	for _, update := range updates {
 		if UpdateValid(rules, update) {
 			middleSum += UpdateMiddle(update)
+		} else {
+			incorrectMiddleSum += UpdateMiddle(SortUpdate(rules, update))
 		}
 	}
 
 	fmt.Printf("A: %d\n", middleSum)
+	fmt.Printf("B: %d\n", incorrectMiddleSum)
 }
 
 type Rule struct {
@@ -88,6 +95,16 @@ func UpdateMiddle(update Update) int {
 	return int(middle)
 }
 
-func SortUpdate(rules []Rule, udpate Update) Update {
-	return udpate
+func SortUpdate(rules []Rule, update Update) Update {
+	slices.SortFunc(update, func(a, b string) int {
+		for _, rule := range rules {
+			if rule.After == a && rule.Before == b {
+				return 1
+			} else if rule.Before == a && rule.After == b {
+				return -1
+			}
+		}
+		return 0
+	})
+	return update
 }
