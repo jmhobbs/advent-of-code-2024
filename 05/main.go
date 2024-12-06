@@ -87,3 +87,7 @@ func UpdateMiddle(update Update) int {
 	}
 	return int(middle)
 }
+
+func SortUpdate(rules []Rule, udpate Update) Update {
+	return udpate
+}

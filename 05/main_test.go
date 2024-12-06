@@ -36,57 +36,57 @@ func Test_ParseInput(t *testing.T) {
 	)
 }
 
-func Test_UpdateValid(t *testing.T) {
-	rules := []main.Rule{
-		{"47", "53"},
-		{"97", "13"},
-		{"97", "61"},
-		{"97", "47"},
-		{"75", "29"},
-		{"61", "13"},
-		{"75", "53"},
-		{"29", "13"},
-		{"97", "29"},
-		{"53", "29"},
-		{"61", "53"},
-		{"97", "53"},
-		{"61", "29"},
-		{"47", "13"},
-		{"75", "47"},
-		{"97", "75"},
-		{"47", "61"},
-		{"75", "61"},
-		{"47", "29"},
-		{"75", "13"},
-		{"53", "13"},
-	}
+var sampleRules []main.Rule = []main.Rule{
+	{"47", "53"},
+	{"97", "13"},
+	{"97", "61"},
+	{"97", "47"},
+	{"75", "29"},
+	{"61", "13"},
+	{"75", "53"},
+	{"29", "13"},
+	{"97", "29"},
+	{"53", "29"},
+	{"61", "53"},
+	{"97", "53"},
+	{"61", "29"},
+	{"47", "13"},
+	{"75", "47"},
+	{"97", "75"},
+	{"47", "61"},
+	{"75", "61"},
+	{"47", "29"},
+	{"75", "13"},
+	{"53", "13"},
+}
 
+func Test_UpdateValid(t *testing.T) {
 	// In the above example, the first update (`75,47,61,53,29`) is in the right order:
 	t.Run("75,47,61,53,29", func(t *testing.T) {
-		assert.True(t, main.UpdateValid(rules, main.Update{"75", "47", "61", "53", "29"}))
+		assert.True(t, main.UpdateValid(sampleRules, main.Update{"75", "47", "61", "53", "29"}))
 	})
 
 	// The second and third updates are also in the correct order according to the rules.
 	t.Run("97,61,53,29,13", func(t *testing.T) {
-		assert.True(t, main.UpdateValid(rules, main.Update{"97", "61", "53", "29", "13"}))
+		assert.True(t, main.UpdateValid(sampleRules, main.Update{"97", "61", "53", "29", "13"}))
 	})
 	t.Run("75,29,13", func(t *testing.T) {
-		assert.True(t, main.UpdateValid(rules, main.Update{"75", "29", "13"}))
+		assert.True(t, main.UpdateValid(sampleRules, main.Update{"75", "29", "13"}))
 	})
 
 	// The fourth update, `75,97,47,61,53`, is not in the correct order:
 	t.Run("75,97,47,61,53", func(t *testing.T) {
-		assert.False(t, main.UpdateValid(rules, main.Update{"75", "97", "47", "61", "53"}))
+		assert.False(t, main.UpdateValid(sampleRules, main.Update{"75", "97", "47", "61", "53"}))
 	})
 
 	// The fifth update, 61,13,29, is also not in the correct order
 	t.Run("61,13,29", func(t *testing.T) {
-		assert.False(t, main.UpdateValid(rules, main.Update{"61", "13", "29"}))
+		assert.False(t, main.UpdateValid(sampleRules, main.Update{"61", "13", "29"}))
 	})
 
 	// The last update, `97,13,75,29,47`, is not in the correct order due to breaking several rules.
 	t.Run("97,13,75,29,47", func(t *testing.T) {
-		assert.False(t, main.UpdateValid(rules, main.Update{"97", "13", "75", "29", "47"}))
+		assert.False(t, main.UpdateValid(sampleRules, main.Update{"97", "13", "75", "29", "47"}))
 	})
 }
 
@@ -98,4 +98,34 @@ func Test_UpdateMiddle(t *testing.T) {
 	assert.Equal(t, 61, main.UpdateMiddle(main.Update{"75", "47", "61", "53", "29"}))
 	assert.Equal(t, 53, main.UpdateMiddle(main.Update{"97", "61", "53", "29", "13"}))
 	assert.Equal(t, 29, main.UpdateMiddle(main.Update{"75", "29", "13"}))
+}
+
+func Test_SortUpdate(t *testing.T) {
+	// 75,97,47,61,53 becomes 97,75,47,61,53.
+	t.Run("75,97,47,61,53", func(t *testing.T) {
+		assert.Equal(
+			t,
+			main.Update{"97", "75", "47", "61", "53"},
+			main.SortUpdate(sampleRules, main.Update{"75", "97", "47", "61", "53"}),
+		)
+	})
+
+	// 61,13,29 becomes 61,29,13.
+	t.Run("61,13,29", func(t *testing.T) {
+		assert.Equal(
+			t,
+			main.Update{"61", "29", "13"},
+			main.SortUpdate(sampleRules, main.Update{"61", "13", "29"}),
+		)
+	})
+
+	// 97,13,75,29,47 becomes 97,75,47,29,13.
+	t.Run("97,13,75,29,47", func(t *testing.T) {
+		assert.Equal(
+			t,
+			main.Update{"97", "75", "47", "29", "13"},
+			main.SortUpdate(sampleRules, main.Update{"97", "13", "75", "29", "47"}),
+		)
+	})
+
 }
