@@ -20,6 +20,9 @@ func main() {
 	defer f.Close()
 
 	left, right, err := ParseInput(f)
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Printf("A: %d\n", ListDistance(left, right))
 	fmt.Printf("B: %d\n", ListSimilarity(left, right))
